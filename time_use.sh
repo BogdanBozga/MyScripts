@@ -10,10 +10,12 @@ import pyglet
 
 
 #--- set the process name to limit below
-app = "steam"
+apps = {"steam","lutris"}
+# app1 = "steam"
+# app2 = "lutris"
 dayChoose={
     "luni":False,
-    "marti":{"hour":21,"minute":0},
+    "marti":"False",
     "miercuri":False,
     "joi":False,
     "vineri":{"hour":21,"minute":0},
@@ -23,7 +25,7 @@ dayChoose={
 
 reminderTimeEye = 3600 # 1 hour
 repetitionTime = 600 # 10 minutes
-adviseTime = {"hour":22,"minutes":45} #time when "enough for today appear"
+adviseTime = {"hour":22,"minutes":25} #time when "enough for today appear"
 
 uselog = "/opt/limit/uselog"
 datefile = "/opt/limit/currdate"
@@ -39,10 +41,6 @@ def accessDenied():
     time.sleep(1) # to make sure that the comand finish to say
 
 def gif_suck():
-    # set up the screen
-    # SCREEN_NUM = 0
-    # SCREENS = pyglet.canvas.Display().get_screens()
-    # SCREEN = SCREENS[SCREEN_NUM]
 
     animation = pyglet.image.load_animation('/home/bozga/MyScripts/time_use/access-denied-pizza-steve.gif')
     animSprite = pyglet.sprite.Sprite(animation)
@@ -62,7 +60,11 @@ def gif_suck():
     pyglet.app.run()
 
 
-def app_kill():
+
+
+
+
+def app_kill(app):
     try:
         # if the pid of the targeted process exists, add a "tick" to the used quantum
         pid = subprocess.check_output(["pgrep", app]).decode("utf-8").strip()
@@ -81,6 +83,10 @@ def app_kill():
     except PermissionError:
         pass
 
+
+def main():
+    for app in apps:
+        app_kill(app)
 
 def eyeSound():
     os.system('spd-say "eye care first"')
@@ -114,11 +120,10 @@ rAddTime = 0
 while True:
     time.sleep(10)
     rAddTime += 10
-    app_kill()
+    main()
     rAddTime = verifyTimeEye(rAddTime)
     rAddTime = verifyTimeEnough(rAddTime)
-    # eyeSound()
-    # EnoughForTodaySound()
+
 
 
 
